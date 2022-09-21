@@ -1,0 +1,33 @@
+name: "build"
+on: [push, pull_request]
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup BATS
+        uses: mig4/setup-bats@v1
+        with:
+          bats-version: 1.7.0
+
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Lint Dockerfile
+        uses: hadolint/hadolint-action@v2.1.0
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - run: npm install
+
+      - name: Check if README is up-to-date
+        run: |
+          npm run docs
+          git status
+          git diff --quiet || echo 'README is not up-to-date, run `npm install && npm run docs` to update.'
+          git diff --quiet || exit 1
+
+      - name: Run tests
+        run: bats test

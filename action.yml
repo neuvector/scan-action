@@ -1,0 +1,72 @@
+name: 'NeuVector Image Scan'
+description: 'Scans a container image for vulnerabilities with [NeuVector](https://neuvector.com)'
+inputs:
+  image-registry:
+    description: 'Registry of the image to scan, e.g. `https://registry.organization.com/`'
+    required: false
+    default: ''
+  image-registry-username:
+    description: 'Username for the registry authentication'
+    required: false
+    default: ''
+  image-registry-password:
+    description: 'Password for the registry authentication'
+    required: false
+    default: ''
+  image-repository:
+    description: 'Repository of the image to scan, e.g. `org/image-name`'
+    required: true
+  image-tag:
+    description: 'Tag of the image to scan, e.g. `1.0.0`'
+    required: true
+  min-high-cves-to-fail:
+    description: 'Minimum CVEs with high severity to fail the job'
+    required: false
+    default: '0'
+  min-medium-cves-to-fail:
+    description: 'Minimum CVEs with medium severity to fail the job'
+    required: false
+    default: '0'
+  cve-names-to-fail:
+    description: 'Comma-separated list of CVE names that make the job fail, e.g. `CVE-2021-4160,CVE-2022-0778'
+    required: false
+    default: ''
+  nv-scanner-image:
+    description: 'NeuVector Scanner image to use for scanning'
+    required: false
+    default: 'neuvector/scanner:latest'
+  output:
+    description: 'Output format, one of: `text`, `json`, `csv`'
+    required: false
+    default: 'text'
+  debug:
+    description: 'Debug mode, on of: `true`, `false`'
+    required: false
+    default: 'false'
+outputs:
+  vulnerability_count:
+    description: 'Number of found vulnerabilities'
+  high_vulnerability_count:
+    description: 'Number of found vulnerabilities with high severity'
+  medium_vulnerability_count:
+    description: 'Number of found vulnerabilities with medium severity'
+
+runs:
+  using: "docker"
+  image: 'Dockerfile'
+  env:
+    HIGH_VUL_TO_FAIL: ${{ inputs.min-high-cves-to-fail }}
+    MEDIUM_VUL_TO_FAIL: ${{ inputs.min-medium-cves-to-fail }}
+    VUL_NAMES_TO_FAIL: ${{ inputs.cve-names-to-fail }}
+    SCANNER_REPOSITORY: ${{ inputs.image-repository }}
+    SCANNER_TAG: ${{ inputs.image-tag }}
+    SCANNER_REGISTRY: ${{ inputs.image-registry }}
+    SCANNER_REGISTRY_USERNAME: ${{ inputs.image-registry-username }}
+    SCANNER_REGISTRY_PASSWORD: ${{ inputs.image-registry-password }}
+    NV_SCANNER_IMAGE: ${{ inputs.nv-scanner-image }}
+    DEBUG: ${{ inputs.debug }}
+    OUTPUT: ${{ inputs.output }}
+
+branding:
+  icon: search
+  color: green

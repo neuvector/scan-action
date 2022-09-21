@@ -1,0 +1,11 @@
+{
+  "devDependencies": {
+    "github-action-readme-generator": "^1.2.7"
+  },
+  "scripts": {
+    "docs": "github-action-readme-generator"
+  },
+  "engines": {
+    "node": "~18"
+  }
+}
