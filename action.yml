@@ -1,5 +1,6 @@
-name: 'NeuVector Image Scan'
+name: 'NeuVector Vulnerability Scan Action'
 description: 'Scans a container image for vulnerabilities with [NeuVector](https://neuvector.com)'
+author: 'SUSE NeuVector'
 inputs:
   image-registry:
     description: 'Registry of the image to scan, e.g. `https://registry.organization.com/`'

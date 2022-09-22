@@ -34,7 +34,7 @@ jobs:
         run: |
           docker build -t registry.organization.com/org/image-name:${{ github.sha }} .
       - name: Scan Image
-        uses: bashofmann/neuvector-image-scan-action@main
+        uses: neuvector/scan-action@main
         with:
           image-repository: registry.organization.com/org/image-name
           image-tag: ${{ github.sha }}
@@ -58,7 +58,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Scan Remote Image
-        uses: bashofmann/neuvector-image-scan-action@main
+        uses: neuvector/scan-action@main
         with:
           image-registry: https://registry.organization.com/
           image-registry-username: ${{ secrets.RegistryUsername }}
@@ -110,7 +110,7 @@ The following inputs can be used in `step.with`:
 <!-- start usage -->
 
 ```yaml
-- uses: bashofmann/neuvector-image-scan-action@main
+- uses: neuvector/scan-action@main
   with:
     # Registry of the image to scan, e.g. `https://registry.organization.com/`
     # Default:
@@ -158,9 +158,9 @@ The following inputs can be used in `step.with`:
 
 <!-- end usage -->
 
-[release]: https://github.com/bashofmann/neuvector-image-scan-action/releases/latest
-[release-img]: https://img.shields.io/github/release/bashofmann/neuvector-image-scan-action.svg?logo=github
-[marketplace]: https://github.com/marketplace/actions/bashofmann/neuvector-image-scan
-[marketplace-img]: https://img.shields.io/badge/marketplace-bashofmann/neuvector-image-scan--action-blue?logo=github
-[license]: https://github.com/bashofmann/neuvector-image-scan-action/blob/master/LICENSE
-[license-img]: https://img.shields.io/github/license/bashofmann/neuvector-image-scan-action
+[release]: https://github.com/neuvector/scan-action/releases/latest
+[release-img]: https://img.shields.io/github/release/neuvector/scan-action.svg?logo=github
+[marketplace]: https://github.com/marketplace/actions/neuvector/scan-action
+[marketplace-img]: https://img.shields.io/badge/marketplace-neuvector/scan--action-blue?logo=github
+[license]: https://github.com/neuvector/scan-action/blob/master/LICENSE
+[license-img]: https://img.shields.io/github/license/neuvector/scan-action
