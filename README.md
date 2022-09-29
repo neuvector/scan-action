@@ -1,6 +1,6 @@
 <!-- start title -->
 
-# GitHub Action: NeuVector Image Scan
+# GitHub Action: NeuVector Vulnerability Scan Action
 
 <!-- end title -->
 <!-- start description -->
