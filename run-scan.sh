@@ -41,9 +41,9 @@ FOUND_MEDIUM=$(cat scan_result.json | jq '.report.vulnerabilities[] | select(.se
 VUL_LIST=$(printf '["%s"]' "${VUL_NAMES_TO_FAIL//,/\",\"}")
 VUL_LIST_FOUND=$(cat scan_result.json | jq --arg arr "$VUL_LIST" '.report.vulnerabilities[] | select(.name as $n | $arr | index($n)) |.name')
 
-echo "::set-output name=vulnerability_count::${VUL_NUM}"
-echo "::set-output name=high_vulnerability_count::${FOUND_HIGH}"
-echo "::set-output name=medium_vulnerability_count::${FOUND_MEDIUM}"
+echo "vulnerability_count=${VUL_NUM}" >> $GITHUB_OUTPUT
+echo "high_vulnerability_count=${FOUND_HIGH}" >> $GITHUB_OUTPUT
+echo "medium_vulnerability_count=${FOUND_MEDIUM}" >> $GITHUB_OUTPUT
 
 if [[ -n $VUL_LIST_FOUND ]]; then
   fail_reason="Found specific named vulnerabilities."
