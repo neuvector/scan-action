@@ -29,7 +29,11 @@ inputs:
     required: false
     default: '0'
   cve-names-to-fail:
-    description: 'Comma-separated list of CVE names that make the job fail, e.g. `CVE-2021-4160,CVE-2022-0778'
+    description: 'Comma-separated list of CVE names(without spaces between the entries) that make the job fail, e.g. `CVE-2021-4160,CVE-2022-0778'
+    required: false
+    default: ''
+  cve-names-to-exempt:
+    description: 'Comma-separated list of CVE names(without spaces between the entries) that exempt the job fail, e.g. `CVE-2021-4160,CVE-2022-0778'
     required: false
     default: ''
   nv-scanner-image:
@@ -59,6 +63,7 @@ runs:
     HIGH_VUL_TO_FAIL: ${{ inputs.min-high-cves-to-fail }}
     MEDIUM_VUL_TO_FAIL: ${{ inputs.min-medium-cves-to-fail }}
     VUL_NAMES_TO_FAIL: ${{ inputs.cve-names-to-fail }}
+    VUL_NAMES_TO_EXEMPT: ${{ inputs.cve-names-to-exempt }}
     SCANNER_REPOSITORY: ${{ inputs.image-repository }}
     SCANNER_TAG: ${{ inputs.image-tag }}
     SCANNER_REGISTRY: ${{ inputs.image-registry }}
