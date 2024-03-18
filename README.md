@@ -138,10 +138,15 @@ The following inputs can be used in `step.with`:
     # Default: 0
     min-medium-cves-to-fail: ""
 
-    # Comma-separated list of CVE names that make the job fail, e.g.
+    # Comma-separated list of CVE names(without spaces between the entries) that make the job fail, e.g.
     # `CVE-2021-4160,CVE-2022-0778
     # Default:
     cve-names-to-fail: ""
+
+    # CComma-separated list of CVE names(without spaces between the entries) that exempt the job fail, e.g.
+    # `CVE-2021-4160,CVE-2022-0778
+    # Default:
+    cve-names-to-exempt: ""
 
     # NeuVector Scanner image to use for scanning
     # Default: neuvector/scanner:latest
