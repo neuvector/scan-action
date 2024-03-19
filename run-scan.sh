@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+source /usr/bin/utils.sh
 
 set -e
 
@@ -35,16 +36,16 @@ fi
 docker cp neuvector.scanner:/var/neuvector/scan_result.json scan_result.json
 docker rm neuvector.scanner
 
+VUL_EXEMPT_LIST=$(printf '["%s"]' "${VUL_NAMES_TO_EXEMPT//,/\",\"}")
+filterOutExemptCVEsFromJson "scan_result.json" "$VUL_EXEMPT_LIST"
+
 VUL_NUM=$(cat scan_result.json | jq '.report.vulnerabilities | length')
 FOUND_HIGH=$(cat scan_result.json | jq '.report.vulnerabilities[] | select(.severity == "High") | .severity' | wc -l)
 FOUND_MEDIUM=$(cat scan_result.json | jq '.report.vulnerabilities[] | select(.severity == "Medium") | .severity' | wc -l)
 VUL_LIST=$(printf '["%s"]' "${VUL_NAMES_TO_FAIL//,/\",\"}")
 VUL_LIST_FOUND=$(cat scan_result.json | jq --arg arr "$VUL_LIST" '.report.vulnerabilities[] | select(.name as $n | $arr | index($n)) |.name')
 
-echo "::set-output name=vulnerability_count::${VUL_NUM}"
-echo "::set-output name=high_vulnerability_count::${FOUND_HIGH}"
-echo "::set-output name=medium_vulnerability_count::${FOUND_MEDIUM}"
-
+# we must count the high and med before we put.
 if [[ -n $VUL_LIST_FOUND ]]; then
   fail_reason="Found specific named vulnerabilities."
   scan_fail="true"
@@ -58,6 +59,7 @@ else
   fail_reason=""
   scan_fail="false"
 fi
+
 
 if [[ $scan_fail == "true" ]]; then
   summary="Image scanning failed. ${fail_reason}"
@@ -83,8 +85,6 @@ if [[ "$OUTPUT" == "text" ]]; then
   echo -e "Vulnerabilities grouped by packages:\n"
 
   jq -r '[.report.vulnerabilities | group_by(.package_name) | .[] | {package_name: .[0].package_name, vuls: [ (.[] | {name: .name, description: .description, severity: .severity}) ]}] | .[] | (.package_name) + ":\n" +  (.vuls | [.[] | .name + " (" + .severity + "): " + .description] | join("\n")) + "\n\n"' scan_result.json
-
-  echo -e "\n${summary}"
 fi
 
 if [[ "$OUTPUT" == "json" ]]; then
@@ -98,6 +98,8 @@ if [[ "$OUTPUT" == "csv" ]]; then
 
   cat scan_result.json | jq -r '['$labels'],(.'$query' | ['$vars'])|@csv'
 fi
+
+echo -e "\n${summary}"
 
 if [[ "$scan_fail" == "true" ]]; then
   exit 1;
