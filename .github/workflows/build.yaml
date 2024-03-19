@@ -20,7 +20,7 @@ jobs:
         with:
           node-version: 18
 
-      - run: npm install
+      - run: npm ci
 
       - name: Check if README is up-to-date
         run: |
