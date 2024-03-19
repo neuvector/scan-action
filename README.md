@@ -77,19 +77,20 @@ The following inputs can be used in `step.with`:
 
 <!-- start inputs -->
 
-| **Input**                     | **Description**                                                                             | **Default**                | **Required** |
-| ----------------------------- | ------------------------------------------------------------------------------------------- | -------------------------- | ------------ |
-| **`image-registry`**          | Registry of the image to scan, e.g. `https://registry.organization.com/`                    |                            | **false**    |
-| **`image-registry-username`** | Username for the registry authentication                                                    |                            | **false**    |
-| **`image-registry-password`** | Password for the registry authentication                                                    |                            | **false**    |
-| **`image-repository`**        | Repository of the image to scan, e.g. `org/image-name`                                      |                            | **true**     |
-| **`image-tag`**               | Tag of the image to scan, e.g. `1.0.0`                                                      |                            | **true**     |
-| **`min-high-cves-to-fail`**   | Minimum CVEs with high severity to fail the job                                             | `0`                        | **false**    |
-| **`min-medium-cves-to-fail`** | Minimum CVEs with medium severity to fail the job                                           | `0`                        | **false**    |
-| **`cve-names-to-fail`**       | Comma-separated list of CVE names that make the job fail, e.g. `CVE-2021-4160,CVE-2022-0778 |                            | **false**    |
-| **`nv-scanner-image`**        | NeuVector Scanner image to use for scanning                                                 | `neuvector/scanner:latest` | **false**    |
-| **`output`**                  | Output format, one of: `text`, `json`, `csv`                                                | `text`                     | **false**    |
-| **`debug`**                   | Debug mode, on of: `true`, `false`                                                          | `false`                    | **false**    |
+| **Input**                     | **Description**                                                                                                                   | **Default**                | **Required** |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | -------------------------- | ------------ |
+| **`image-registry`**          | Registry of the image to scan, e.g. `https://registry.organization.com/`                                                          |                            | **false**    |
+| **`image-registry-username`** | Username for the registry authentication                                                                                          |                            | **false**    |
+| **`image-registry-password`** | Password for the registry authentication                                                                                          |                            | **false**    |
+| **`image-repository`**        | Repository of the image to scan, e.g. `org/image-name`                                                                            |                            | **true**     |
+| **`image-tag`**               | Tag of the image to scan, e.g. `1.0.0`                                                                                            |                            | **true**     |
+| **`min-high-cves-to-fail`**   | Minimum CVEs with high severity to fail the job                                                                                   | `0`                        | **false**    |
+| **`min-medium-cves-to-fail`** | Minimum CVEs with medium severity to fail the job                                                                                 | `0`                        | **false**    |
+| **`cve-names-to-fail`**       | Comma-separated list of CVE names(without spaces between the entries) that make the job fail, e.g. `CVE-2021-4160,CVE-2022-0778   |                            | **false**    |
+| **`cve-names-to-exempt`**     | Comma-separated list of CVE names(without spaces between the entries) that exempt the job fail, e.g. `CVE-2021-4160,CVE-2022-0778 |                            | **false**    |
+| **`nv-scanner-image`**        | NeuVector Scanner image to use for scanning                                                                                       | `neuvector/scanner:latest` | **false**    |
+| **`output`**                  | Output format, one of: `text`, `json`, `csv`                                                                                      | `text`                     | **false**    |
+| **`debug`**                   | Debug mode, on of: `true`, `false`                                                                                                | `false`                    | **false**    |
 
 <!-- end inputs -->
 
@@ -110,7 +111,7 @@ The following inputs can be used in `step.with`:
 <!-- start usage -->
 
 ```yaml
-- uses: neuvector/scan-action@main
+- uses: pohanhuangtw/scan-action@main
   with:
     # Registry of the image to scan, e.g. `https://registry.organization.com/`
     # Default:
@@ -138,13 +139,13 @@ The following inputs can be used in `step.with`:
     # Default: 0
     min-medium-cves-to-fail: ""
 
-    # Comma-separated list of CVE names(without spaces between the entries) that make the job fail, e.g.
-    # `CVE-2021-4160,CVE-2022-0778
+    # Comma-separated list of CVE names(without spaces between the entries) that make
+    # the job fail, e.g. `CVE-2021-4160,CVE-2022-0778
     # Default:
     cve-names-to-fail: ""
 
-    # CComma-separated list of CVE names(without spaces between the entries) that exempt the job fail, e.g.
-    # `CVE-2021-4160,CVE-2022-0778
+    # Comma-separated list of CVE names(without spaces between the entries) that
+    # exempt the job fail, e.g. `CVE-2021-4160,CVE-2022-0778
     # Default:
     cve-names-to-exempt: ""
 

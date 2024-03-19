@@ -37,7 +37,7 @@ docker cp neuvector.scanner:/var/neuvector/scan_result.json scan_result.json
 docker rm neuvector.scanner
 
 VUL_EXEMPT_LIST=$(printf '["%s"]' "${VUL_NAMES_TO_EXEMPT//,/\",\"}")
-remmoveExemptCVEFromJson "scan_result.json" "$VUL_EXEMPT_LIST"
+filterOutExemptCVEsFromJson "scan_result.json" "$VUL_EXEMPT_LIST"
 
 VUL_NUM=$(cat scan_result.json | jq '.report.vulnerabilities | length')
 FOUND_HIGH=$(cat scan_result.json | jq '.report.vulnerabilities[] | select(.severity == "High") | .severity' | wc -l)

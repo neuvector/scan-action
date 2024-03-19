@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-function remmoveExemptCVEFromJson() {
+function filterOutExemptCVEsFromJson() {
     local scanResult="$1"
     local exemptCVEsJson="$2"
 
