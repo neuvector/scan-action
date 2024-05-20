@@ -14,6 +14,22 @@ inputs:
     description: 'Password for the registry authentication'
     required: false
     default: ''
+  scanner-control-user-name:
+    description: 'Username for the Cluster authentication'
+    required: false
+    default: ''
+  scanner-control-password :
+    description: 'Password for the Cluster authentication'
+    required: false
+    default: ''
+  cluster-join-address:
+    description: 'Cluster IP for the endpoit of the scanner to send report to'
+    required: false
+    default: ''
+  cluster-join-port:
+    description: 'Cluster port for the endpoit of the scanner to send report to'
+    required: false
+    default: ''
   image-repository:
     description: 'Repository of the image to scan, e.g. `org/image-name`'
     required: true
@@ -69,6 +85,10 @@ runs:
     SCANNER_REGISTRY: ${{ inputs.image-registry }}
     SCANNER_REGISTRY_USERNAME: ${{ inputs.image-registry-username }}
     SCANNER_REGISTRY_PASSWORD: ${{ inputs.image-registry-password }}
+    SCANNER_CTRL_API_USERNAME: ${{ inputs.scanner-control-user-name }}
+    SCANNER_CTRL_API_PASSWORD: ${{ inputs.scanner-control-password }}
+    CLUSTER_JOIN_ADDR: ${{ inputs.cluster-join-address }}
+    CLUSTER_JOIN_PORT: ${{ inputs.cluster-join-port }}
     NV_SCANNER_IMAGE: ${{ inputs.nv-scanner-image }}
     DEBUG: ${{ inputs.debug }}
     OUTPUT: ${{ inputs.output }}

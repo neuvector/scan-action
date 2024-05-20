@@ -77,20 +77,24 @@ The following inputs can be used in `step.with`:
 
 <!-- start inputs -->
 
-| **Input**                     | **Description**                                                                                                                   | **Default**                | **Required** |
-| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | -------------------------- | ------------ |
-| **`image-registry`**          | Registry of the image to scan, e.g. `https://registry.organization.com/`                                                          |                            | **false**    |
-| **`image-registry-username`** | Username for the registry authentication                                                                                          |                            | **false**    |
-| **`image-registry-password`** | Password for the registry authentication                                                                                          |                            | **false**    |
-| **`image-repository`**        | Repository of the image to scan, e.g. `org/image-name`                                                                            |                            | **true**     |
-| **`image-tag`**               | Tag of the image to scan, e.g. `1.0.0`                                                                                            |                            | **true**     |
-| **`min-high-cves-to-fail`**   | Minimum CVEs with high severity to fail the job                                                                                   | `0`                        | **false**    |
-| **`min-medium-cves-to-fail`** | Minimum CVEs with medium severity to fail the job                                                                                 | `0`                        | **false**    |
-| **`cve-names-to-fail`**       | Comma-separated list of CVE names(without spaces between the entries) that make the job fail, e.g. `CVE-2021-4160,CVE-2022-0778   |                            | **false**    |
-| **`cve-names-to-exempt`**     | Comma-separated list of CVE names(without spaces between the entries) that exempt the job fail, e.g. `CVE-2021-4160,CVE-2022-0778 |                            | **false**    |
-| **`nv-scanner-image`**        | NeuVector Scanner image to use for scanning                                                                                       | `neuvector/scanner:latest` | **false**    |
-| **`output`**                  | Output format, one of: `text`, `json`, `csv`                                                                                      | `text`                     | **false**    |
-| **`debug`**                   | Debug mode, on of: `true`, `false`                                                                                                | `false`                    | **false**    |
+| **Input**                       | **Description**                                                                                                                   | **Default**                | **Required** |
+| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | -------------------------- | ------------ |
+| **`image-registry`**            | Registry of the image to scan, e.g. `https://registry.organization.com/`                                                          |                            | **false**    |
+| **`image-registry-username`**   | Username for the registry authentication                                                                                          |                            | **false**    |
+| **`image-registry-password`**   | Password for the registry authentication                                                                                          |                            | **false**    |
+| **`scanner-control-user-name`** | Username for the Cluster authentication                                                                                           |                            | **false**    |
+| **`scanner-control-password`**  | Password for the Cluster authentication                                                                                           |                            | **false**    |
+| **`cluster-join-address`**      | Cluster IP for the endpoit of the scanner to send report to                                                                       |                            | **false**    |
+| **`cluster-join-port`**         | Cluster port for the endpoit of the scanner to send report to                                                                     |                            | **false**    |
+| **`image-repository`**          | Repository of the image to scan, e.g. `org/image-name`                                                                            |                            | **true**     |
+| **`image-tag`**                 | Tag of the image to scan, e.g. `1.0.0`                                                                                            |                            | **true**     |
+| **`min-high-cves-to-fail`**     | Minimum CVEs with high severity to fail the job                                                                                   | `0`                        | **false**    |
+| **`min-medium-cves-to-fail`**   | Minimum CVEs with medium severity to fail the job                                                                                 | `0`                        | **false**    |
+| **`cve-names-to-fail`**         | Comma-separated list of CVE names(without spaces between the entries) that make the job fail, e.g. `CVE-2021-4160,CVE-2022-0778   |                            | **false**    |
+| **`cve-names-to-exempt`**       | Comma-separated list of CVE names(without spaces between the entries) that exempt the job fail, e.g. `CVE-2021-4160,CVE-2022-0778 |                            | **false**    |
+| **`nv-scanner-image`**          | NeuVector Scanner image to use for scanning                                                                                       | `neuvector/scanner:latest` | **false**    |
+| **`output`**                    | Output format, one of: `text`, `json`, `csv`                                                                                      | `text`                     | **false**    |
+| **`debug`**                     | Debug mode, on of: `true`, `false`                                                                                                | `false`                    | **false**    |
 
 <!-- end inputs -->
 
@@ -124,6 +128,22 @@ The following inputs can be used in `step.with`:
     # Password for the registry authentication
     # Default:
     image-registry-password: ""
+
+    # Username for the Cluster authentication
+    # Default:
+    scanner-control-user-name: ""
+
+    # Password for the Cluster authentication
+    # Default:
+    scanner-control-password: ""
+
+    # Cluster IP for the endpoit of the scanner to send report to
+    # Default:
+    cluster-join-address: ""
+
+    # Cluster port for the endpoit of the scanner to send report to
+    # Default:
+    cluster-join-port: ""
 
     # Repository of the image to scan, e.g. `org/image-name`
     image-repository: ""
