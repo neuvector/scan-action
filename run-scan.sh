@@ -21,6 +21,8 @@ MEDIUM_VUL_TO_FAIL=${MEDIUM_VUL_TO_FAIL:-"0"}
 OUTPUT=${OUTPUT:-"text"}
 DEBUG=${DEBUG:-"false"}
 
+# Formulate the Repository
+SCANNER_REPOSITORY=$(prepareRepository "$SCANNER_REGISTRY_USERNAME" "$SCANNER_REGISTRY_PASSWORD" "$SCANNER_REPOSITORY" "$SCANNER_TAG")
 docker run --name neuvector.scanner ${REGISTRY_ARG} -e SCANNER_REPOSITORY=${SCANNER_REPOSITORY} -e SCANNER_TAG=${SCANNER_TAG} -e SCANNER_ON_DEMAND=true -v /var/run/docker.sock:/var/run/docker.sock ${NV_SCANNER_IMAGE} > scanner_output.log
 result=$?
 
