@@ -1,20 +1,26 @@
 name: "build"
 on: [push, pull_request]
+
 jobs:
   build:
     name: build
     runs-on: ubuntu-latest
     steps:
-      - name: Setup BATS
-        uses: mig4/setup-bats@v1
+      - name: Checkout BATS
+        uses: actions/checkout@v4
         with:
-          bats-version: 1.7.0
+          repository: bats-core/bats-core
+          ref: v1.11.0
+
+      - name: Setup BATS
+        run: |
+          sudo ./install.sh /usr/local
 
       - name: Check out code
         uses: actions/checkout@v4
 
-      - name: Lint Dockerfile
-        uses: hadolint/hadolint-action@v3.1.0
+      - name: Run tests
+        run: bats test
 
       - uses: actions/setup-node@v4
         with:
@@ -22,12 +28,20 @@ jobs:
 
       - run: npm ci
 
+      - name: Install Hadolint
+        run: |
+          wget -O hadolint https://github.com/hadolint/hadolint/releases/download/v2.12.0/hadolint-Linux-x86_64
+          echo "56de6d5e5ec427e17b74fa48d51271c7fc0d61244bf5c90e828aab8362d55010  hadolint" | sha256sum --check
+          sudo mv hadolint /usr/local/bin/hadolint
+          sudo chmod +x /usr/local/bin/hadolint
+
+      - name: Run Hadolint
+        run: |
+          hadolint Dockerfile
+
       - name: Check if README is up-to-date
         run: |
           npm run docs
           git status
           git diff --quiet || echo 'README is not up-to-date, run `npm install && npm run docs` to update.'
           git diff --quiet || exit 1
-
-      - name: Run tests
-        run: bats test
