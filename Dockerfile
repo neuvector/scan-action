@@ -1,4 +1,4 @@
-FROM registry.suse.com/bci/bci-base:15.6
+FROM registry.suse.com/bci/bci-base:15.7
 
 RUN zypper in -y jq docker && zypper clean
 
