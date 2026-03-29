@@ -16,6 +16,7 @@ if [ -n "${SCANNER_REGISTRY_PASSWORD}" ]; then
 fi
 
 NV_SCANNER_IMAGE=${NV_SCANNER_IMAGE:-"neuvector/scanner:latest"}
+CRITICAL_VUL_TO_FAIL=${CRITICAL_VUL_TO_FAIL:-""}
 HIGH_VUL_TO_FAIL=${HIGH_VUL_TO_FAIL:-"0"}
 MEDIUM_VUL_TO_FAIL=${MEDIUM_VUL_TO_FAIL:-"0"}
 OUTPUT=${OUTPUT:-"text"}
@@ -40,26 +41,41 @@ VUL_EXEMPT_LIST=$(printf '["%s"]' "${VUL_NAMES_TO_EXEMPT//,/\",\"}")
 filterOutExemptCVEsFromJson "scan_result.json" "$VUL_EXEMPT_LIST"
 
 VUL_NUM=$(cat scan_result.json | jq '.report.vulnerabilities | length')
+FOUND_CRITICAL=$(cat scan_result.json | jq '.report.vulnerabilities[] | select(.severity == "Critical") | .severity' | wc -l)
 FOUND_HIGH=$(cat scan_result.json | jq '.report.vulnerabilities[] | select(.severity == "High") | .severity' | wc -l)
 FOUND_MEDIUM=$(cat scan_result.json | jq '.report.vulnerabilities[] | select(.severity == "Medium") | .severity' | wc -l)
 VUL_LIST=$(printf '["%s"]' "${VUL_NAMES_TO_FAIL//,/\",\"}")
 VUL_LIST_FOUND=$(cat scan_result.json | jq --arg arr "$VUL_LIST" '.report.vulnerabilities[] | select(.name as $n | $arr | index($n)) |.name')
+total_high_critical=$((FOUND_HIGH + FOUND_CRITICAL))
 
 echo "GITHUB_OUTPUT: $GITHUB_OUTPUT"
 echo "vulnerability_count=$VUL_NUM" >> "$GITHUB_OUTPUT"
+echo "critical_vulnerability_count=$FOUND_CRITICAL" >> "$GITHUB_OUTPUT"
 echo "high_vulnerability_count=$FOUND_HIGH" >> "$GITHUB_OUTPUT"
 echo "medium_vulnerability_count=$FOUND_MEDIUM" >> "$GITHUB_OUTPUT"
+
+aboveHighToFail=0
+# backward compatibility for upgraded version.
+if [ -z "$CRITICAL_VUL_TO_FAIL" ]; then
+  aboveHighToFail=${HIGH_VUL_TO_FAIL}
+fi
 
 # we must count the high and med before we put.
 if [[ -n $VUL_LIST_FOUND ]]; then
   fail_reason="Found specific named vulnerabilities."
   scan_fail="true"
+elif [ ${CRITICAL_VUL_TO_FAIL} -ne 0 -a $FOUND_CRITICAL -ge ${CRITICAL_VUL_TO_FAIL} ]; then
+  fail_reason="Found ${FOUND_CRITICAL} critical vulnerabilities exceeding the maximum of ${HIGH_VUL_TO_FAIL}."
+  scan_fail="true"  
 elif [ ${HIGH_VUL_TO_FAIL} -ne 0 -a $FOUND_HIGH -ge ${HIGH_VUL_TO_FAIL} ]; then
   fail_reason="Found ${FOUND_HIGH} high vulnerabilities exceeding the maximum of ${HIGH_VUL_TO_FAIL}."
   scan_fail="true"
 elif [ ${MEDIUM_VUL_TO_FAIL} -ne 0 -a $FOUND_MEDIUM -ge ${MEDIUM_VUL_TO_FAIL} ]; then
   fail_reason="Found ${MEDIUM_VUL_TO_FAIL} medium vulnerabilities exceeding the maximum of ${MEDIUM_VUL_TO_FAIL}."
   scan_fail="true"
+elif [ ${aboveHighToFail} -ne 0 -a $total_high_critical -ge ${aboveHighToFail} ]; then
+  fail_reason="Found ${FOUND_CRITICAL} critical and ${FOUND_HIGH} high vulnerabilities exceeding the maximum of ${aboveHighToFail} (combined high and critical threshold)."
+  scan_fail="true"  
 else
   fail_reason=""
   scan_fail="false"

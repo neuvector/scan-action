@@ -60,6 +60,7 @@ runs:
   using: "docker"
   image: 'Dockerfile'
   env:
+    CRITICAL_VUL_TO_FAIL: ${{ inputs.min-critical-cves-to-fail }}
     HIGH_VUL_TO_FAIL: ${{ inputs.min-high-cves-to-fail }}
     MEDIUM_VUL_TO_FAIL: ${{ inputs.min-medium-cves-to-fail }}
     VUL_NAMES_TO_FAIL: ${{ inputs.cve-names-to-fail }}
