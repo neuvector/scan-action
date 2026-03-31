@@ -29,12 +29,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
       - name: Build image
         run: |
           docker build -t registry.organization.com/org/image-name:${{ github.sha }} .
       - name: Scan Image
-        uses: neuvector/scan-action@main
+        uses: neuvector/scan-action@dc98ca3e206249d47f00d884f04dd9905a94f156
         with:
           image-repository: registry.organization.com/org/image-name
           image-tag: ${{ github.sha }}
@@ -56,9 +56,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
       - name: Scan Remote Image
-        uses: neuvector/scan-action@main
+        uses: neuvector/scan-action@dc98ca3e206249d47f00d884f04dd9905a94f156
         with:
           image-registry: https://registry.organization.com/
           image-registry-username: ${{ secrets.RegistryUsername }}
