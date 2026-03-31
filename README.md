@@ -34,7 +34,7 @@ jobs:
         run: |
           docker build -t registry.organization.com/org/image-name:${{ github.sha }} .
       - name: Scan Image
-        uses: neuvector/scan-action@dc98ca3e206249d47f00d884f04dd9905a94f156
+        uses: neuvector/scan-action@196964fb269cfcd1fe139dd27c8440a8396bd8ab #v1.0.0
         with:
           image-repository: registry.organization.com/org/image-name
           image-tag: ${{ github.sha }}
@@ -58,7 +58,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
       - name: Scan Remote Image
-        uses: neuvector/scan-action@dc98ca3e206249d47f00d884f04dd9905a94f156
+        uses: neuvector/scan-action@196964fb269cfcd1fe139dd27c8440a8396bd8ab #v1.0.0
         with:
           image-registry: https://registry.organization.com/
           image-registry-username: ${{ secrets.RegistryUsername }}
