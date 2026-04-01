@@ -1,6 +1,6 @@
 {
   "devDependencies": {
-    "github-action-readme-generator": "^1.2.7"
+    "github-action-readme-generator": "^1.8.0"
   },
   "scripts": {
     "docs": "github-action-readme-generator"
